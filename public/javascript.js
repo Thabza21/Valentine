@@ -1,11 +1,5 @@
-
-
-
-
-
-
 function sendEmail(choice) {
-    fetch("https://valentine-production-39be.up.railway.app", {
+    fetch("/send-email", {  // 🔴 Change from "/" to "/send-email"
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ choice: choice })
@@ -14,3 +8,5 @@ function sendEmail(choice) {
     .then(data => console.log(data))
     .catch(error => console.error("Error:", error));
 }
+
+
