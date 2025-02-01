@@ -1,10 +1,12 @@
+require("dotenv").config();  // Load environment variables
+
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Allow frontend to make requests
+app.use(cors());
 
 app.post("/send-email", async (req, res) => {
     const { choice } = req.body;
@@ -12,25 +14,26 @@ app.post("/send-email", async (req, res) => {
     let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: "thabzagta5@gmail.com", // Replace with your email
-            pass: "mqsu hqsc blzo yqtr" // Replace with an app password (not your email password)
+            user: process.env.EMAIL_USER,  // ✅ Uses environment variable
+            pass: process.env.EMAIL_PASS   // ✅ Uses environment variable
         }
     });
 
     let mailOptions = {
-        from: "thabzagta5@gmail.com",
-        to: "thabzagta5@gmail.com",
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER,
         subject: "Response to your Valentine's application",
-        text: `She said ${choice}`
+        text: `They said: ${choice}`
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        res.send("Email sent successfully!");
+        res.send("Email sent successfully! ✅");
     } catch (error) {
         console.error(error);
-        res.status(500).send("Error sending email");
+        res.status(500).send("Error sending email ❌");
     }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
