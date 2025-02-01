@@ -1,21 +1,29 @@
-require("dotenv").config();  // Load environment variables
 
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+require("dotenv").config();
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Serve static files from the public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// Route to send emails
 app.post("/send-email", async (req, res) => {
     const { choice } = req.body;
 
     let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: process.env.EMAIL_USER,  // ✅ Uses environment variable
-            pass: process.env.EMAIL_PASS   // ✅ Uses environment variable
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         }
     });
 
@@ -35,5 +43,11 @@ app.post("/send-email", async (req, res) => {
     }
 });
 
+// Ensure the main page is served
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
