@@ -5,7 +5,7 @@
 
 
 function sendEmail(choice) {
-    fetch("https://thabza21.github.io/Valentine/", {
+    fetch("https://valentine-ucox.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ choice: choice })
